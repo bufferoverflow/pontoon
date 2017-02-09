@@ -9,10 +9,7 @@ from django.core.management.base import BaseCommand
 from django.conf import settings
 from django.contrib.sites.models import Site
 from allauth.socialaccount.models import SocialApp
-from allauth.socialaccount.providers.fxa.provider import FirefoxAccountsProvider
-
-
-FXA_PROVIDER_ID = FirefoxAccountsProvider.id
+from allauth.socialaccount.providers.gitlab.provider import GitLabProvider
 
 
 class Command(BaseCommand):
@@ -20,24 +17,24 @@ class Command(BaseCommand):
             'credentials that match settings')
 
     def handle(self, *args, **options):
-        # Check if FXA_* settings are configured, bail if not.
-        if settings.FXA_CLIENT_ID is None or settings.FXA_SECRET_KEY is None:
-            self.stdout.write("FXA_* settings unavailable; "
+        # Check if settings are configured, bail if not.
+        if settings.ALLAUTH_CLIENT_ID is None or settings.ALLAUTH_SECRET is None:
+            self.stdout.write("ALLAUTH_CLIENT_ID and ALLAUTH_SECRET settings unavailable; "
                               "skipping provider config.")
             return
 
         # Grab the credentials from settings
         data = dict(
-            name='FxA',
-            provider=FXA_PROVIDER_ID,
+            name='gitlab',
+            provider=GitLabProvider.id,
             client_id=settings.ALLAUTH_CLIENT_ID,
             secret=settings.ALLAUTH_SECRET
         )
 
         try:
             # Update the existing provider with current settings.
-            app = SocialApp.objects.get(provider=FXA_PROVIDER_ID)
-            self.stdout.write("Updating existing Firefox Accounts provider "
+            app = SocialApp.objects.get(provider=GitLabProvider.id)
+            self.stdout.write("Updating existing GitLab provider "
                               "(pk=%s)" % app.pk)
             for k, v in data.items():
                 setattr(app, k, v)
@@ -46,7 +43,7 @@ class Command(BaseCommand):
             # Create the provider if necessary.
             app = SocialApp(**data)
             app.save()
-            self.stdout.write("Created new Firefox Accounts provider (pk=%s)" %
+            self.stdout.write("Created new GitLab provider (pk=%s)" %
                               app.pk)
 
         # Ensure the provider applies to the current default site.

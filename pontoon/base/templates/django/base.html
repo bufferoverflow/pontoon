@@ -54,7 +54,7 @@
             {% endif %}
         {% else %}
             {% if not user.is_authenticated %}
-                <li id="sign-in"><a href="{% provider_login_url 'fxa' %}">Sign in</a></li>
+                <li id="sign-in"><a href="{% provider_login_url %}">Sign in</a></li>
             {% else %}
                 <li id="sign-out"><a href="{% url 'account_logout' %}" title="{{ user.email|nospam }}">Sign out</a></li>
             {% endif %}

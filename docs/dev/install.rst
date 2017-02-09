@@ -78,8 +78,9 @@ Installation
       DATABASE_URL=postgres://pontoon:asdf@localhost/pontoon
       SESSION_COOKIE_SECURE=False
       SITE_URL=http://localhost:8000
-      FXA_CLIENT_ID=2651b9211a44b7b2
-      FXA_SECRET_KEY=a3cafccbafe39db54f2723f8a6f804c337e362950f197b5b33050d784129d570
+      ALLAUTH_CLIENT_ID=2651b9211a44b7b2
+      ALLAUTH_SECRET=a3cafccbafe39db54f2723f8a6f804c337e362950f197b5b33050d784129d570
+      ALLAUTH_OAUTH2_SCOPE='profile:uid, profile:display_name, profile:email'
       FXA_OAUTH_ENDPOINT=https://oauth-stable.dev.lcip.org/v1
       FXA_PROFILE_ENDPOINT=https://stable.dev.lcip.org/profile/v1
 
@@ -98,8 +99,14 @@ Installation
      local development site. Some people prefer to use
      ``http://127.0.0.1:8000`` instead of ``localhost``. However, should you
      decide to change the ``SITE_URL``, you also need to request_
-     the new ``FXA_CLIENT_ID`` and ``FXA_SECRET_KEY``, and our demo/intro site
+     the new ``ALLAUTH_CLIENT_ID`` and ``ALLAUTH_SECRET``, and our demo/intro site
      ``http://localhost:8000/intro`` will require change of base url.
+
+   - ``ALLAUTH_PROVIDER`` can be set to ``gitlab`` with the following variables
+     ``GITLAB_URL`` if not using https://gitlab.com
+     ``ALLAUTH_OAUTH2_SCOPE`` set to `api, read_user`
+     ``ALLAUTH_CLIENT_ID`` and ``ALLAUTH_SECRET`` from OAuth configuration
+     Callback url, e.g. `http://localhost:8000/accounts/gitlab/login/callback/`
 
 6. Initialize your database by running the migrations:
 

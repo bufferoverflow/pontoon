@@ -144,6 +144,7 @@ INSTALLED_APPS = (
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.fxa',
+    'allauth.socialaccount.providers.gitlab',
 )
 
 BLOCKED_IPS = os.environ.get('BLOCKED_IPS', '').split(',')
@@ -665,19 +666,27 @@ ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 ACCOUNT_USER_DISPLAY = account_username
 
+# allauth settings
+ALLAUTH_CLIENT_ID = os.environ.get('ALLAUTH_CLIENT_ID', '')
+ALLAUTH_SECRET = os.environ.get('ALLAUTH_SECRET', '')
+ALLAUTH_OAUTH2_SCOPE = os.environ.get('ALLAUTH_OAUTH2_SCOPE', '')
+ALLAUTH_PROVIDER = os.environ.get('ALLAUTH_PROVIDER', 'fxa')
+
 # Firefox Accounts
-FXA_CLIENT_ID = os.environ.get('FXA_CLIENT_ID', '')
-FXA_SECRET_KEY = os.environ.get('FXA_SECRET_KEY', '')
 FXA_OAUTH_ENDPOINT = os.environ.get('FXA_OAUTH_ENDPOINT', '')
 FXA_PROFILE_ENDPOINT = os.environ.get('FXA_PROFILE_ENDPOINT', '')
-FXA_SCOPE = ['profile:uid', 'profile:display_name', 'profile:email']
+
+# GitLab Url
+GITLAB_URL = os.environ.get('GITLAB_URL', 'https://gitlab.com')
 
 # All settings related to the AllAuth
 SOCIALACCOUNT_PROVIDERS = {
     'fxa': {
-        'SCOPE': FXA_SCOPE,
         'OAUTH_ENDPOINT': FXA_OAUTH_ENDPOINT,
         'PROFILE_ENDPOINT': FXA_PROFILE_ENDPOINT,
+    },
+    'gitlab': {
+        'GITLAB_URL': GITLAB_URL
     }
 }
 

@@ -5,6 +5,7 @@ import urllib
 import urlparse
 
 from django import template
+from django.conf import settings
 from django.contrib.humanize.templatetags import humanize
 from django.contrib.staticfiles.storage import staticfiles_storage
 from django.core.urlresolvers import reverse
@@ -167,15 +168,15 @@ def nospam(self):
 #
 
 @library.global_function
-def provider_login_url(request, provider_id='fxa', **query):
+def provider_login_url(request, **query):
     """
     This function adapts the django-allauth templatetags that don't support jinja2.
     @TODO: land support for the jinja2 tags in the django-allauth.
     """
-    provider = providers.registry.by_id(provider_id)
+    provider = providers.registry.by_id(settings.ALLAUTH_PROVIDER)
 
     auth_params = query.get('auth_params', None)
-    query['scope'] = 'profile:uid profile:email profile:display_name'
+    query['scope'] = settings.ALLAUTH_OAUTH2_SCOPE
     process = query.get('process', None)
 
     if auth_params == '':
